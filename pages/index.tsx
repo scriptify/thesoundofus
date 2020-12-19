@@ -1,25 +1,50 @@
 import { redirectToSpotifyLogin } from "../browser/util/spotify";
 import useSpotifyPlaylist from "../browser/util/spotify/useSpotifyPlaylist";
-import useSpotifyAcessToken from "../browser/util/spotify/useSpotifyAcessToken";
 import { useWebPlayer } from "../browser/util/spotify/useWebPlayer";
-import { useEffect } from "react";
+import { redirectToGoogleLogin } from "../browser/util/google";
+import useAccessToken from "../browser/util/useAccessToken";
+import useGooglePhotosAlbum from "../browser/util/google/useGooglePhotosAlbum";
 
-const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-if (!clientId)
+const spotifyClientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
+if (!spotifyClientId)
   throw new Error("process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID not defined");
+
+const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+if (!googleClientId)
+  throw new Error("process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID not defined");
 
 const playlistId = process.env.NEXT_PUBLIC_SPOTIFY_PLAYLIST_ID;
 if (!playlistId)
   throw new Error("process.env.NEXT_PUBLIC_SPOTIFY_PLAYLIST_ID not defined");
 
+const albumId = process.env.NEXT_PUBLIC_GOOGLE_ALBUM_ID;
+if (!albumId)
+  throw new Error("process.env.NEXT_PUBLIC_GOOGLE_ALBUM_ID not defined");
+
 function onSpotifyLogin() {
-  redirectToSpotifyLogin({ clientId });
+  redirectToSpotifyLogin({ clientId: spotifyClientId });
+}
+
+function onGoogleLogin() {
+  redirectToGoogleLogin({ clientId: googleClientId });
 }
 
 export default function Home() {
-  const { accessToken } = useSpotifyAcessToken();
-  const playlist = useSpotifyPlaylist({ accessToken, playlistId });
-  const { play, loading: playerLoading } = useWebPlayer({ accessToken });
+  const { accessToken, type } = useAccessToken();
+  const playlist = useSpotifyPlaylist({
+    accessToken: type === "spotify" ? accessToken : undefined,
+    playlistId,
+  });
+  const { play, loading: playerLoading } = useWebPlayer({
+    accessToken: type === "spotify" ? accessToken : undefined,
+  });
+
+  const album = useGooglePhotosAlbum({
+    accessToken: type === "google" ? accessToken : undefined,
+    albumId,
+  });
+
+  console.log({ album });
 
   function onPlayRandom() {
     if (!playerLoading && playlist) {
@@ -31,6 +56,7 @@ export default function Home() {
   return (
     <main>
       <button onClick={onSpotifyLogin}>Spotify Login</button>
+      <button onClick={onGoogleLogin}>Google Login</button>
       <button onClick={onPlayRandom}>Play</button>
     </main>
   );
