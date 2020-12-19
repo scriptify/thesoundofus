@@ -164,6 +164,11 @@
     "@types/prop-types" "*"
     csstype "^3.0.2"
 
+"@types/spotify-web-playback-sdk@^0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@types/spotify-web-playback-sdk/-/spotify-web-playback-sdk-0.1.7.tgz#44a9038f6a96a67a83b4495348e49c71b279f74f"
+  integrity sha512-6LukYGr1EMux3Ak1K0htq+lN2pU1G4o8m6E/HzQvXkJzWHEQkyQb0MRJ+lAM0nzY602Sqqd1IKNCRAZ2BQDx0A==
+
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.9.0.tgz#bd850604b4042459a5a41cd7d338cbed695ed964"

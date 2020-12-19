@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { SpotifyPlaylist } from "./types";
 
 interface UseSpotifyPlaylistParams {
   accessToken?: string;
@@ -9,7 +10,7 @@ export default function useSpotifyPlaylist({
   accessToken,
   playlistId,
 }: UseSpotifyPlaylistParams) {
-  const [playlist, setPlaylist] = useState<any>();
+  const [playlist, setPlaylist] = useState<SpotifyPlaylist>();
 
   useEffect(() => {
     let didCancel = false;
