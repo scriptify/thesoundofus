@@ -20,7 +20,10 @@ export default class SlideShowStore {
     makeAutoObservable(this);
     this.spotifyWebPlayer = new SpotifyWebPlayer({
       accessToken: spotifyAccessToken,
-      onError: () => {},
+      onError: () => {
+        alert("Bitte erneut einloggen (Spotify)");
+        window.location.reload();
+      },
     });
     this.setup();
   }
