@@ -5,6 +5,7 @@ import rootStore from "../../state/RootStore";
 import CurrentlyPlayingSong from "./CurrentlyPlayingSong";
 import FullscreenImage from "./FullscreenImage";
 import PhotoTile from "./PhotoTile";
+import SlideshowButton from "./SlideshowButton";
 
 interface Props {}
 
@@ -22,6 +23,7 @@ const ImagesGrid = ({}: Props) => {
     <>
       <FullscreenImage />
       <CurrentlyPlayingSong />
+      <SlideshowButton />
       <section>
         <header className="py-12">
           <h1 className="text-6xl text-center text-white font-bold">
@@ -36,12 +38,7 @@ const ImagesGrid = ({}: Props) => {
               <PhotoTile
                 key={image.id}
                 photo={image}
-                onClick={() =>
-                  rootStore.slideShow.setActivePhoto({
-                    activePhotoId: image.id,
-                    activeSongUri: image.song.track.uri,
-                  })
-                }
+                onClick={() => rootStore.startSlideShow(image.id)}
               />
             ))}
           </Masonry>

@@ -43,6 +43,10 @@ export default class SpotifyWebPlayer {
     this.options = options;
   }
 
+  public pause() {
+    this.player?.pause();
+  }
+
   public async load() {
     const WebPlayer = await loadWebPlayer();
     const player = new WebPlayer({

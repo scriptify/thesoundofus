@@ -26,6 +26,7 @@ const FullscreenImage = ({}: Props) => {
       <div>
         <IconButton
           onClick={() => {
+            rootStore.stopSlidshow();
             rootStore.slideShow.closeSlideShow();
           }}
         >
@@ -34,13 +35,19 @@ const FullscreenImage = ({}: Props) => {
       </div>
       <div className="flex justify-between">
         <IconButton
-          onClick={() => rootStore.previousPhoto()}
+          onClick={() => {
+            rootStore.stopSlidshow();
+            rootStore.previousPhoto();
+          }}
           className="opacity-50 hover:opacity-100"
         >
           <LeftIcon />
         </IconButton>
         <IconButton
-          onClick={() => rootStore.nextPhoto()}
+          onClick={() => {
+            rootStore.stopSlidshow();
+            rootStore.nextPhoto();
+          }}
           className="opacity-50 hover:opacity-100"
         >
           <RightIcon />

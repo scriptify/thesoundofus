@@ -1,3 +1,4 @@
+import { throws } from "assert";
 import { autorun, makeAutoObservable, reaction, toJS } from "mobx";
 import getAccessToken, { resetAccessToken } from "../util/accessTokens";
 import env from "../util/env";
@@ -15,6 +16,8 @@ class RootStore {
   public playlist?: SpotifyPlaylist;
   private photos?: Album;
   public slideShow?: SlideShowStore;
+  private slideShowInterval?: number;
+  private SLIDESHOW_INTERVAL: number = 10000;
 
   constructor() {
     makeAutoObservable(this);
@@ -141,6 +144,41 @@ class RootStore {
       activePhotoId: newPhoto.id,
       activeSongUri: newPhoto.song.track.uri,
     });
+  }
+
+  public startSlideShow(fromPhotoId: string = this.imagesGrid[0].id) {
+    if (!this.slideShow.activePhotoId) {
+      const fromPhoto = this.imagesGrid.find((p) => p.id === fromPhotoId);
+      this.slideShow.setActivePhoto({
+        activePhotoId: fromPhoto.id,
+        activeSongUri: fromPhoto.song.track.uri,
+      });
+    } else if (!this.slideShow.activeSongUri) {
+      const photo = this.imagesGrid.find(
+        (p) => p.id === this.slideShow.activePhotoId
+      );
+      if (photo) {
+        this.slideShow.setActivePhoto({
+          activePhotoId: photo.id,
+          activeSongUri: photo.song.track.uri,
+        });
+      }
+    }
+    this.slideShowInterval = window.setInterval(() => {
+      this.nextPhoto();
+    }, this.SLIDESHOW_INTERVAL);
+  }
+
+  public stopSlidshow() {
+    if (this.slideShowInterval) {
+      this.slideShow.activeSongUri = undefined;
+      window.clearInterval(this.slideShowInterval);
+      this.slideShowInterval = undefined;
+    }
+  }
+
+  public get isSlideshowActive() {
+    return !!this.slideShowInterval;
   }
 }
 

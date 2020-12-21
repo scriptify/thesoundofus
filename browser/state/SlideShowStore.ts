@@ -31,6 +31,8 @@ export default class SlideShowStore {
     autorun(() => {
       if (this.activeSongUri) {
         this.spotifyWebPlayer.play(this.activeSongUri);
+      } else {
+        this.spotifyWebPlayer.pause();
       }
     });
   }
@@ -46,4 +48,6 @@ export default class SlideShowStore {
   public closeSlideShow() {
     this.activePhotoId = undefined;
   }
+
+  public start() {}
 }
