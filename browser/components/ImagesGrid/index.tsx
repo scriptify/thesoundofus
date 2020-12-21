@@ -36,8 +36,12 @@ const ImagesGrid = ({}: Props) => {
       <CurrentlyPlayingSong />
       <SlideshowButton />
       <section>
-        <header className="py-12">
-          <h1 className="text-6xl text-center text-white font-bold">
+        <header className="py-24 sm:flex justify-center items-center">
+          <img
+            src={rootStore.playlist?.images[2].url}
+            className="mx-auto sm:mr-2 sm:ml-0 mb-6 sm:mb-0"
+          />
+          <h1 className="text-7xl text-center text-black font-bold tracking-wider">
             The Sound of Us
           </h1>
         </header>
