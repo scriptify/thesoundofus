@@ -36,6 +36,10 @@ class RootStore {
       if (e.key === "ArrowRight") {
         this.nextPhoto();
       }
+      if (e.key === "Escape") {
+        this.stopSlidshow();
+        this.slideShow.closeSlideShow();
+      }
     });
   }
 
