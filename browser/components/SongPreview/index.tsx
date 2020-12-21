@@ -17,7 +17,7 @@ export const SongPreview = ({
   return (
     <div
       className={classnames(
-        "rounded-full flex justify-between items-center bg-black pr-4 shadow-lg",
+        "rounded-full flex justify-between items-center bg-gray-700 pr-8 shadow-lg",
         {
           "h-14": size === "normal",
           "h-10": size === "small",
@@ -36,7 +36,7 @@ export const SongPreview = ({
           {name}
         </h3>
         <h4
-          className={classnames("text-gray-200", {
+          className={classnames("text-gray-400", {
             "text-sm": size === "normal",
             "text-xs": size === "small",
           })}

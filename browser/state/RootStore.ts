@@ -110,6 +110,38 @@ class RootStore {
   public get isAuthenticationNeeded() {
     return !this.googleAccessToken || !this.spotifyAccessToken;
   }
+
+  public nextPhoto() {
+    if (!this.slideShow?.activePhotoId) return;
+    const currIndex = this.imagesGrid.findIndex(
+      (photo) => photo.id === this.slideShow?.activePhotoId
+    );
+    let newIndex = currIndex + 1;
+    if (newIndex >= this.imagesGrid.length) {
+      newIndex = 0;
+    }
+    const newPhoto = this.imagesGrid[newIndex];
+    this.slideShow.setActivePhoto({
+      activePhotoId: newPhoto.id,
+      activeSongUri: newPhoto.song.track.uri,
+    });
+  }
+
+  public previousPhoto() {
+    if (!this.slideShow?.activePhotoId) return;
+    const currIndex = this.imagesGrid.findIndex(
+      (photo) => photo.id === this.slideShow?.activePhotoId
+    );
+    let newIndex = currIndex - 1;
+    if (newIndex < 0) {
+      newIndex = this.imagesGrid.length - 1;
+    }
+    const newPhoto = this.imagesGrid[newIndex];
+    this.slideShow.setActivePhoto({
+      activePhotoId: newPhoto.id,
+      activeSongUri: newPhoto.song.track.uri,
+    });
+  }
 }
 
 const rootStore = new RootStore();

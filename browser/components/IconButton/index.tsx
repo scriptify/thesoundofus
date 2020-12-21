@@ -13,6 +13,7 @@ const IconButton: React.FC<Props> = ({
   return (
     <button
       className={classnames(
+        className,
         "bg-white rounded-full flex justify-center items-center shadow-md",
         { ["p-2"]: size === "small" },
         { ["p-4"]: size === "middle" },

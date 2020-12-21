@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { autorun, makeAutoObservable } from "mobx";
 import SpotifyWebPlayer from "../util/spotify/WebPlayer";
 
 interface SlideShowStoreParams {
@@ -28,6 +28,11 @@ export default class SlideShowStore {
   private async setup() {
     await this.spotifyWebPlayer.load();
     this.loading = false;
+    autorun(() => {
+      if (this.activeSongUri) {
+        this.spotifyWebPlayer.play(this.activeSongUri);
+      }
+    });
   }
 
   public setActivePhoto({
@@ -36,7 +41,6 @@ export default class SlideShowStore {
   }: SetActivePhotoParameters) {
     this.activePhotoId = activePhotoId;
     this.activeSongUri = activeSongUri;
-    this.spotifyWebPlayer.play(activeSongUri);
   }
 
   public closeSlideShow() {

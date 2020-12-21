@@ -33,10 +33,16 @@ const FullscreenImage = ({}: Props) => {
         </IconButton>
       </div>
       <div className="flex justify-between">
-        <IconButton>
+        <IconButton
+          onClick={() => rootStore.previousPhoto()}
+          className="opacity-50 hover:opacity-100"
+        >
           <LeftIcon />
         </IconButton>
-        <IconButton>
+        <IconButton
+          onClick={() => rootStore.nextPhoto()}
+          className="opacity-50 hover:opacity-100"
+        >
           <RightIcon />
         </IconButton>
       </div>

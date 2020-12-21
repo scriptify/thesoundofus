@@ -24,12 +24,14 @@ const ImagesGrid = ({}: Props) => {
       <CurrentlyPlayingSong />
       <section>
         <header className="py-12">
-          <h1 className="text-6xl text-center">The Sound of Us</h1>
+          <h1 className="text-6xl text-center text-white font-bold">
+            The Sound of Us
+          </h1>
         </header>
         <ResponsiveMasonry
           columnsCountBreakPoints={{ 350: 1, 750: 3, 1100: 4 }}
         >
-          <Masonry gutter="4px">
+          <Masonry gutter="0px">
             {rootStore.imagesGrid.map((image) => (
               <PhotoTile
                 key={image.id}

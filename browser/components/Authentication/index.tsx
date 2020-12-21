@@ -25,14 +25,14 @@ const Authentication = ({}: Props) => {
           url={spotifyOAuthUrl}
           icon={<SpotifyIcon color="#1DB954" />}
           isAuthenticated={!!rootStore.spotifyAccessToken}
-          text="Zum Spotify Login"
+          text="Spotify Login"
         />
         <div className="mt-4" />
         <AuthButton
           url={googleOAuthUrl}
           icon={<GoogleIcon color="#DB4437" />}
           isAuthenticated={!!rootStore.googleAccessToken}
-          text="Zum Google Login"
+          text="Google Login"
         />
       </div>
     </section>
