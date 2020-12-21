@@ -23,8 +23,20 @@ class RootStore {
     makeAutoObservable(this);
     if (typeof window !== "undefined") {
       this.loadAccessTokens();
+      this.setupKeyboardBindings();
     }
     this.setupDataReactions();
+  }
+
+  private setupKeyboardBindings() {
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        this.previousPhoto();
+      }
+      if (e.key === "ArrowRight") {
+        this.nextPhoto();
+      }
+    });
   }
 
   /**
