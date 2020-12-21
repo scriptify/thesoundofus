@@ -30,20 +30,34 @@ const ImagesGrid = ({}: Props) => {
     );
   }
 
+  const fromDate = new Date(
+    rootStore.imagesGrid[0]?.mediaMetadata.creationTime
+  );
+  const toDate = new Date(
+    rootStore.imagesGrid[
+      rootStore.imagesGrid.length - 1
+    ]?.mediaMetadata.creationTime
+  );
+
   return (
     <>
       <FullscreenImage />
       <CurrentlyPlayingSong />
       <SlideshowButton />
       <section>
-        <header className="py-24 sm:flex justify-center items-center">
-          <img
-            src={rootStore.playlist?.images[2].url}
-            className="mx-auto sm:mr-2 sm:ml-0 mb-6 sm:mb-0"
-          />
-          <h1 className="text-7xl text-center text-black font-bold tracking-wider">
-            The Sound of Us
-          </h1>
+        <header className="py-24">
+          <div className="sm:flex justify-center items-center">
+            <img
+              src={rootStore.playlist?.images[2].url}
+              className="mx-auto sm:mr-2 sm:ml-0 mb-6 sm:mb-0"
+            />
+            <h1 className="text-7xl text-center text-black font-bold tracking-wider">
+              The Sound of Us
+            </h1>
+          </div>
+          <h2 className="text-lg text-gray-600 text-center italic">
+            {fromDate.toLocaleDateString()} - {toDate.toLocaleDateString()}
+          </h2>
         </header>
         <ResponsiveMasonry
           columnsCountBreakPoints={{ 350: 1, 750: 3, 1100: 4 }}
