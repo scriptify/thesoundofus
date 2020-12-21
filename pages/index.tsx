@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import rootStore from "../browser/state/RootStore";
 import Authentication from "../browser/components/Authentication";
 import { useEffect, useState } from "react";
+import ImagesGrid from "../browser/components/ImagesGrid";
 
 function Home() {
   // function onPlayRandom() {
@@ -20,7 +21,9 @@ function Home() {
   // So... pretty useless to Next.js for this app
   return (
     didRender && (
-      <main>{rootStore.isAuthenticationNeeded && <Authentication />}</main>
+      <main>
+        {rootStore.isAuthenticationNeeded ? <Authentication /> : <ImagesGrid />}
+      </main>
     )
   );
 }
