@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 let isSpotifySdkReady = false;
 
 if (typeof window !== "undefined") {
@@ -32,56 +30,44 @@ function loadWebPlayer() {
   });
 }
 
-interface UseWebPlayerParams {
-  accessToken?: string;
+interface SpotifyWebPlayerParams {
+  accessToken: string;
+  onError: (e: string) => any;
 }
 
-export function useWebPlayer({ accessToken }: UseWebPlayerParams) {
-  const [WebPlayer, setWebPlayerClass] = useState<typeof Spotify.Player>();
-  const [player, setPlayer] = useState<Spotify.SpotifyPlayer>();
-  const [error, setError] = useState<string>();
+export default class SpotifyWebPlayer {
+  private player?: Spotify.SpotifyPlayer;
+  private options: SpotifyWebPlayerParams;
 
-  async function play(spotifyUri: string) {
-    if (accessToken && player) {
-      const playerId = (player as any)._options.id;
-      return fetch(
-        `https://api.spotify.com/v1/me/player/play?device_id=${playerId}`,
-        {
-          method: "PUT",
-          body: JSON.stringify({ uris: [spotifyUri] }),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-    }
+  constructor(options: SpotifyWebPlayerParams) {
+    this.options = options;
   }
 
-  useEffect(() => {
-    let didCancel = false;
-    if (WebPlayer && accessToken) {
-      const player = new WebPlayer({
-        getOAuthToken: (cb) => cb(accessToken),
-        name: "Our player",
-      });
+  public async load() {
+    const WebPlayer = await loadWebPlayer();
+    const player = new WebPlayer({
+      getOAuthToken: (cb) => cb(this.options.accessToken),
+      name: "The Sound of Us",
+    });
+    this.player = player;
 
+    return new Promise((resolve) => {
       // Error handling
       player.addListener("initialization_error", ({ message }) => {
         console.error(message);
-        setError(message);
+        this.options.onError(message);
       });
       player.addListener("authentication_error", ({ message }) => {
         console.error(message);
-        setError(message);
+        this.options.onError(message);
       });
       player.addListener("account_error", ({ message }) => {
         console.error(message);
-        setError(message);
+        this.options.onError(message);
       });
       player.addListener("playback_error", ({ message }) => {
         console.error(message);
-        setError(message);
+        this.options.onError(message);
       });
 
       // Playback status updates
@@ -92,9 +78,7 @@ export function useWebPlayer({ accessToken }: UseWebPlayerParams) {
       // Ready
       player.addListener("ready", ({ device_id }) => {
         console.log("[Spotify] Ready with Device ID", device_id);
-        if (!didCancel) {
-          setPlayer(player);
-        }
+        resolve(true);
       });
 
       // Not Ready
@@ -103,27 +87,21 @@ export function useWebPlayer({ accessToken }: UseWebPlayerParams) {
       });
 
       player.connect();
+    });
+  }
 
-      return () => {
-        didCancel = true;
-      };
-    }
-  }, [WebPlayer, accessToken]);
-
-  useEffect(() => {
-    let didCancel = false;
-    if (WebPlayer) return;
-    (async () => {
-      const Player = await loadWebPlayer();
-      if (!didCancel) {
-        setWebPlayerClass(() => Player);
+  public play(songId: string) {
+    const playerId = (this.player as any)?._options.id;
+    return fetch(
+      `https://api.spotify.com/v1/me/player/play?device_id=${playerId}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ uris: [songId] }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.options.accessToken}`,
+        },
       }
-    })();
-
-    return () => {
-      didCancel = true;
-    };
-  }, [WebPlayer]);
-
-  return { loading: !player, error, play };
+    );
+  }
 }

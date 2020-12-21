@@ -5,13 +5,16 @@ import fetchGooglePhotosAlbum from "../util/google/fetchGooglePhotosAlbum";
 import { Album } from "../util/google/types";
 import fetchSpotifyPlaylist from "../util/spotify/fetchSpotifyPlaylist";
 import { SpotifyPlaylist } from "../util/spotify/types";
+import SlideShowStore from "./SlideShowStore";
+import { PhotoWithSong } from "./types";
 import { getNearestSong } from "./util";
 
 class RootStore {
   public googleAccessToken?: string;
   public spotifyAccessToken?: string;
-  private playlist?: SpotifyPlaylist;
+  public playlist?: SpotifyPlaylist;
   private photos?: Album;
+  public slideShow?: SlideShowStore;
 
   constructor() {
     makeAutoObservable(this);
@@ -66,6 +69,9 @@ class RootStore {
           accessToken: this.spotifyAccessToken,
           playlistId: env.playlistId,
         });
+        this.slideShow = new SlideShowStore({
+          spotifyAccessToken: this.spotifyAccessToken,
+        });
       } catch (e) {
         this.resetSpotifyAccessToken();
       }
@@ -76,7 +82,7 @@ class RootStore {
    * Brings data into an easily
    * digestable form for the UI
    */
-  public get imagesGrid() {
+  public get imagesGrid(): PhotoWithSong[] {
     if (!this.photos || !this.playlist) {
       return [];
     }
