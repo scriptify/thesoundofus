@@ -1,16 +1,7 @@
-import { redirectToSpotifyLogin } from "../browser/util/spotify";
-import { redirectToGoogleLogin } from "../browser/util/google";
-import env from "../browser/util/env";
 import { observer } from "mobx-react-lite";
 import rootStore from "../browser/state/RootStore";
-
-function onSpotifyLogin() {
-  redirectToSpotifyLogin({ clientId: env.spotifyClientId });
-}
-
-function onGoogleLogin() {
-  redirectToGoogleLogin({ clientId: env.googleClientId });
-}
+import Authentication from "../browser/components/Authentication";
+import { useEffect, useState } from "react";
 
 function Home() {
   // function onPlayRandom() {
@@ -20,15 +11,17 @@ function Home() {
   //   }
   // }
 
+  const [didRender, setRender] = useState<boolean>(false);
+
+  useEffect(() => {
+    setRender(true);
+  }, []);
+
+  // So... pretty useless to Next.js for this app
   return (
-    <main>
-      {!rootStore.spotifyAccessToken && (
-        <button onClick={onSpotifyLogin}>Spotify Login</button>
-      )}
-      {!rootStore.googleAccessToken && (
-        <button onClick={onGoogleLogin}>Google Login</button>
-      )}
-    </main>
+    didRender && (
+      <main>{rootStore.isAuthenticationNeeded && <Authentication />}</main>
+    )
   );
 }
 

@@ -7,7 +7,7 @@ export interface Photo {
 }
 
 export interface MediaMetadata {
-  creationTime: Date;
+  creationTime: string;
   width: string;
   height: string;
   photo: Photo;

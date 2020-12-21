@@ -10,12 +10,14 @@
   "dependencies": {
     "@types/spotify-web-playback-sdk": "^0.1.7",
     "autoprefixer": "^10.1.0",
+    "classnames": "^2.2.6",
     "mobx": "^6.0.4",
     "mobx-react-lite": "^3.1.6",
     "next": "10.0.3",
     "postcss": "^8.2.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-icons": "^4.1.0",
     "tailwindcss": "^2.0.2"
   },
   "devDependencies": {

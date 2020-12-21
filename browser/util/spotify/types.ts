@@ -125,7 +125,7 @@ export interface VideoThumbnail {
 }
 
 export interface Item {
-  added_at: Date;
+  added_at: string;
   added_by: AddedBy;
   is_local: boolean;
   primary_color?: any;
