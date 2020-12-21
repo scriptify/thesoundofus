@@ -3,6 +3,7 @@ import React from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import rootStore from "../../state/RootStore";
 import Dialog from "../Dialog";
+import Loading from "../Loading";
 import CurrentlyPlayingSong from "./CurrentlyPlayingSong";
 import FullscreenImage from "./FullscreenImage";
 import PhotoTile from "./PhotoTile";
@@ -17,17 +18,7 @@ const ImagesGrid = ({}: Props) => {
     rootStore.slideShow.loading;
 
   if (isLoading) {
-    return (
-      <Dialog>
-        <div className="h-20">
-          <img
-            src="/loading.svg"
-            className="h-full w-auto"
-            style={{ filter: "invert(1)" }}
-          />
-        </div>
-      </Dialog>
-    );
+    return <Loading />;
   }
 
   const fromDate = new Date(
@@ -38,6 +29,10 @@ const ImagesGrid = ({}: Props) => {
       rootStore.imagesGrid.length - 1
     ]?.mediaMetadata.creationTime
   );
+
+  if (rootStore.imagesGrid.length >= 100) {
+    console.warn("More than 100 images! Pagination needs to be implemented.");
+  }
 
   return (
     <>

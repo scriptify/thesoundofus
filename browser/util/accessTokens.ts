@@ -33,6 +33,8 @@ export default function getAccessToken(
 
     localStorage.setItem(getLocalStorageKey(type), JSON.stringify(urlData));
 
+    window.location.hash = "";
+
     return urlData;
   }
 
