@@ -171,7 +171,6 @@ class RootStore {
 
   public stopSlidshow() {
     if (this.slideShowInterval) {
-      this.slideShow.activeSongUri = undefined;
       window.clearInterval(this.slideShowInterval);
       this.slideShowInterval = undefined;
     }

@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import rootStore from "../../state/RootStore";
+import Dialog from "../Dialog";
 import CurrentlyPlayingSong from "./CurrentlyPlayingSong";
 import FullscreenImage from "./FullscreenImage";
 import PhotoTile from "./PhotoTile";
@@ -16,7 +17,17 @@ const ImagesGrid = ({}: Props) => {
     rootStore.slideShow.loading;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Dialog>
+        <div className="h-20">
+          <img
+            src="/loading.svg"
+            className="h-full w-auto"
+            style={{ filter: "invert(1)" }}
+          />
+        </div>
+      </Dialog>
+    );
   }
 
   return (

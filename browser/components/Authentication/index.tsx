@@ -6,6 +6,7 @@ import rootStore from "../../state/RootStore";
 import env from "../../util/env";
 import { getGoogleOAuthUrl } from "../../util/google";
 import { getSpotifyOAuthUrl } from "../../util/spotify";
+import Dialog from "../Dialog";
 
 import AuthButton from "./AuthButton";
 
@@ -16,7 +17,7 @@ const Authentication = ({}: Props) => {
   const spotifyOAuthUrl = getSpotifyOAuthUrl({ clientId: env.spotifyClientId });
 
   return (
-    <section className="w-full h-full fixed flex justify-center items-center p-4">
+    <Dialog>
       <div className="w-full max-w-xl p-4 bg-gray-100 rounded-md shadow-md">
         <h1 className="text-4xl font-bold text-center mb-10">
           Accounts verbinden
@@ -35,7 +36,7 @@ const Authentication = ({}: Props) => {
           text="Google Login"
         />
       </div>
-    </section>
+    </Dialog>
   );
 };
 
