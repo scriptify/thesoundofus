@@ -48,16 +48,18 @@ const SlideshowButton = ({}: Props) => {
       >
         {rootStore.isSlideshowActive ? <PauseIcon /> : <PlayIcon />}
       </IconButton>
-      <div
-        style={{
-          height: "40px",
-          width: "40px",
-          marginTop: "-50px",
-          marginLeft: "4px",
-        }}
-      >
-        <CircleProgress progress={progress} />
-      </div>
+      {rootStore.isSlideshowActive && (
+        <div
+          style={{
+            height: "40px",
+            width: "40px",
+            marginTop: "-50px",
+            marginLeft: "4px",
+          }}
+        >
+          <CircleProgress progress={progress} />
+        </div>
+      )}
     </div>
   );
 };

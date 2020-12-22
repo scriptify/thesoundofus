@@ -2,7 +2,9 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import rootStore from "../../state/RootStore";
-import Dialog from "../Dialog";
+import { FiPlay as PlayIcon } from "react-icons/fi";
+
+import IconButton from "../IconButton";
 import Loading from "../Loading";
 import CurrentlyPlayingSong from "./CurrentlyPlayingSong";
 import FullscreenImage from "./FullscreenImage";
@@ -49,6 +51,15 @@ const ImagesGrid = ({}: Props) => {
           <h2 className="text-lg text-gray-600 text-center italic">
             {fromDate.toLocaleDateString()} - {toDate.toLocaleDateString()}
           </h2>
+          <IconButton
+            size="large"
+            onClick={() => {
+              rootStore.startSlideShow();
+            }}
+            className="mx-auto mt-2"
+          >
+            <PlayIcon />
+          </IconButton>
         </header>
         <ResponsiveMasonry
           columnsCountBreakPoints={{ 350: 1, 750: 3, 1100: 4 }}
