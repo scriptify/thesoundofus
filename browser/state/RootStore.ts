@@ -1,5 +1,4 @@
-import { throws } from "assert";
-import { autorun, makeAutoObservable, reaction, toJS } from "mobx";
+import { autorun, makeAutoObservable } from "mobx";
 import getAccessToken, { resetAccessToken } from "../util/accessTokens";
 import env from "../util/env";
 import fetchGooglePhotosAlbum from "../util/google/fetchGooglePhotosAlbum";
@@ -8,7 +7,7 @@ import fetchSpotifyPlaylist from "../util/spotify/fetchSpotifyPlaylist";
 import { SpotifyPlaylist } from "../util/spotify/types";
 import SlideShowStore from "./SlideShowStore";
 import { PhotoWithSong } from "./types";
-import { getNearestSongs } from "./util";
+import { mapSongsToPhotos } from "./util";
 
 class RootStore {
   public googleAccessToken?: string;
@@ -16,8 +15,7 @@ class RootStore {
   public playlist?: SpotifyPlaylist;
   private photos?: Album;
   public slideShow?: SlideShowStore;
-  private slideShowInterval?: number;
-  private SLIDESHOW_INTERVAL: number = 10000;
+  private slideShowTimeout?: number;
 
   constructor() {
     makeAutoObservable(this);
@@ -105,28 +103,7 @@ class RootStore {
     if (!this.photos || !this.playlist) {
       return [];
     }
-    // For each photo, find the nearest song in the playlist
-    let alreadyAddedSongs: string[] = [];
-    // The day a photo was taken can include multiple songs
-    const photosWithSongs = this.photos.mediaItems.map(
-      (mediaItem, _, currArr) => {
-        const creationTime = new Date(
-          mediaItem.mediaMetadata.creationTime
-        ).getTime();
-        const nearestSong = getNearestSongs(creationTime, this.playlist);
-        const isFirst = !alreadyAddedSongs.includes(nearestSong.track.id);
-        alreadyAddedSongs.push(nearestSong.track.id);
-        return {
-          ...mediaItem,
-          song: nearestSong,
-          isFirst,
-        };
-      }
-    );
-
-    // Now evenly distribute the same songs across the photos
-
-    return photosWithSongs;
+    return mapSongsToPhotos(this.photos, this.playlist);
   }
 
   public get isAuthenticationNeeded() {
@@ -183,20 +160,26 @@ class RootStore {
         });
       }
     }
-    this.slideShowInterval = window.setInterval(() => {
+    const activePhoto = this.imagesGrid.find(
+      (p) => p.id === this.slideShow.activePhotoId
+    );
+    if (!activePhoto) return;
+    this.slideShowTimeout = window.setTimeout(() => {
       this.nextPhoto();
-    }, this.SLIDESHOW_INTERVAL);
+      // Continue slideshow
+      this.startSlideShow();
+    }, activePhoto.slideDuration * 1000);
   }
 
   public stopSlidshow() {
-    if (this.slideShowInterval) {
-      window.clearInterval(this.slideShowInterval);
-      this.slideShowInterval = undefined;
+    if (this.slideShowTimeout) {
+      window.clearTimeout(this.slideShowTimeout);
+      this.slideShowTimeout = undefined;
     }
   }
 
   public get isSlideshowActive() {
-    return !!this.slideShowInterval;
+    return !!this.slideShowTimeout;
   }
 }
 

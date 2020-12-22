@@ -16,6 +16,9 @@ const FullscreenImage = ({}: Props) => {
     (img) => img.id === rootStore.slideShow?.activePhotoId
   );
   if (!activeImg) return <></>;
+
+  console.log("slideDuration", activeImg.slideDuration);
+
   return (
     <div
       className="fixed w-full h-full bg-contain bg-center bg-no-repeat bg-black flex flex-col justify-between p-4 z-40"
