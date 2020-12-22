@@ -181,6 +181,12 @@ class RootStore {
   public get isSlideshowActive() {
     return !!this.slideShowTimeout;
   }
+
+  public get slideshowDuration() {
+    return this.imagesGrid.reduce((val, photo) => {
+      return val + (photo.slideDuration ?? 0);
+    }, 0);
+  }
 }
 
 const rootStore = new RootStore();

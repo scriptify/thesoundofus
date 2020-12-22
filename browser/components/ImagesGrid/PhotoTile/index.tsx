@@ -12,8 +12,8 @@ const PhotoTile = ({ photo, onClick }: Props) => {
     photo.song.track.album.images[1]?.url ??
     photo.song.track.album.images[0]?.url;
 
-  // const shouldDisplaySong = photo.isFirst
-  const shouldDisplaySong = true;
+  const shouldDisplaySong = photo.isFirst;
+  // const shouldDisplaySong = true;
 
   return (
     <>

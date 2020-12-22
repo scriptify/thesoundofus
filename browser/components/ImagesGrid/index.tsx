@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
+import ms from "ms";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import rootStore from "../../state/RootStore";
 import { FiPlay as PlayIcon } from "react-icons/fi";
@@ -50,6 +51,9 @@ const ImagesGrid = ({}: Props) => {
           </div>
           <h2 className="text-lg text-gray-600 text-center italic">
             {fromDate.toLocaleDateString()} - {toDate.toLocaleDateString()}
+          </h2>
+          <h2 className="text-base text-gray-400 text-center italic">
+            {ms(rootStore.slideshowDuration * 1000)}
           </h2>
           <IconButton
             size="large"
