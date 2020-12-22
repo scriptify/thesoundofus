@@ -30,10 +30,6 @@ const ImagesGrid = ({}: Props) => {
     ]?.mediaMetadata.creationTime
   );
 
-  if (rootStore.imagesGrid.length >= 100) {
-    console.warn("More than 100 images! Pagination needs to be implemented.");
-  }
-
   return (
     <>
       <FullscreenImage />

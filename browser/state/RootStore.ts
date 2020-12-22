@@ -8,7 +8,7 @@ import fetchSpotifyPlaylist from "../util/spotify/fetchSpotifyPlaylist";
 import { SpotifyPlaylist } from "../util/spotify/types";
 import SlideShowStore from "./SlideShowStore";
 import { PhotoWithSong } from "./types";
-import { getNearestSong } from "./util";
+import { getNearestSongs } from "./util";
 
 class RootStore {
   public googleAccessToken?: string;
@@ -107,12 +107,13 @@ class RootStore {
     }
     // For each photo, find the nearest song in the playlist
     let alreadyAddedSongs: string[] = [];
+    // The day a photo was taken can include multiple songs
     const photosWithSongs = this.photos.mediaItems.map(
       (mediaItem, _, currArr) => {
         const creationTime = new Date(
           mediaItem.mediaMetadata.creationTime
         ).getTime();
-        const nearestSong = getNearestSong(creationTime, this.playlist);
+        const nearestSong = getNearestSongs(creationTime, this.playlist);
         const isFirst = !alreadyAddedSongs.includes(nearestSong.track.id);
         alreadyAddedSongs.push(nearestSong.track.id);
         return {
@@ -122,6 +123,8 @@ class RootStore {
         };
       }
     );
+
+    // Now evenly distribute the same songs across the photos
 
     return photosWithSongs;
   }

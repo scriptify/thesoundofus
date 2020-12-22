@@ -24,4 +24,5 @@ export interface MediaItem {
 
 export interface Album {
   mediaItems: MediaItem[];
+  nextPageToken?: string;
 }

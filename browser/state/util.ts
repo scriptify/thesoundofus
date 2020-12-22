@@ -2,16 +2,24 @@ import { SpotifyPlaylist } from "../util/spotify/types";
 
 /**
  * Gets nearest song relative
- * to the specifed time in the playlist
+ * to the specifed time in the playlist,
+ * uses days to measure distance.
+ * If more than one song was
+ * added on that day, it returns
+ * an array of songs.
  */
-export function getNearestSong(time: number, playlist: SpotifyPlaylist) {
-  const sorted = [...playlist.tracks.items];
-  sorted.sort((track1, track2) => {
-    const diff1 = Math.abs(time - new Date(track1.added_at).getTime());
-    const diff2 = Math.abs(time - new Date(track2.added_at).getTime());
-
-    return diff1 - diff2;
+export function getNearestSongs(time: number, playlist: SpotifyPlaylist) {
+  const tracksWithTimeDiff = playlist.tracks.items.map((track) => {
+    const diffMs = Math.abs(time - new Date(track.added_at).getTime());
+    const diffDays = Math.round(diffMs / 1000 / 60 / 60 / 24);
+    return {
+      ...track,
+      diffDays,
+    };
+  });
+  tracksWithTimeDiff.sort((track1, track2) => {
+    return track1.diffDays - track2.diffDays;
   });
 
-  return sorted[0];
+  return tracksWithTimeDiff[0];
 }

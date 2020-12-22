@@ -12,6 +12,9 @@ const PhotoTile = ({ photo, onClick }: Props) => {
     photo.song.track.album.images[1]?.url ??
     photo.song.track.album.images[0]?.url;
 
+  // const shouldDisplaySong = photo.isFirst
+  const shouldDisplaySong = true;
+
   return (
     <>
       <div className="w-full overflow-hidden" style={{ marginTop: "-7px" }}>
@@ -20,7 +23,7 @@ const PhotoTile = ({ photo, onClick }: Props) => {
           className="w-full relative transition-all duration-300"
           key={photo.id}
         >
-          {photo.isFirst && (
+          {shouldDisplaySong && (
             <div className="absolute bottom-0 mb-4 ml-2">
               <SongPreview
                 size="small"

@@ -3,6 +3,7 @@ import { Album } from "./types";
 interface FetchGooglePhotosAlbumParams {
   accessToken: string;
   albumId: string;
+  nextPageToken?: string;
 }
 
 /**
@@ -11,6 +12,7 @@ interface FetchGooglePhotosAlbumParams {
 export default async function fetchGooglePhotosAlbum({
   accessToken,
   albumId,
+  nextPageToken,
 }: FetchGooglePhotosAlbumParams): Promise<Album> {
   const req = await fetch(
     "https://photoslibrary.googleapis.com/v1/mediaItems:search",
@@ -23,6 +25,7 @@ export default async function fetchGooglePhotosAlbum({
       body: JSON.stringify({
         pageSize: "100",
         albumId: albumId,
+        pageToken: nextPageToken,
       }),
     }
   );
@@ -31,7 +34,17 @@ export default async function fetchGooglePhotosAlbum({
     throw new Error(req.status.toString());
   }
 
-  const data = await req.json();
+  const data: Album = await req.json();
+  if (data.nextPageToken) {
+    const nextAlbumPage = await fetchGooglePhotosAlbum({
+      accessToken,
+      albumId,
+      nextPageToken: data.nextPageToken,
+    });
+    return {
+      mediaItems: [...data.mediaItems, ...nextAlbumPage.mediaItems],
+    };
+  }
 
   return data;
 }
