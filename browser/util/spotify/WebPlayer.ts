@@ -38,6 +38,7 @@ interface SpotifyWebPlayerParams {
 export default class SpotifyWebPlayer {
   private player?: Spotify.SpotifyPlayer;
   private options: SpotifyWebPlayerParams;
+  private deviceId?: string;
 
   constructor(options: SpotifyWebPlayerParams) {
     this.options = options;
@@ -81,6 +82,7 @@ export default class SpotifyWebPlayer {
 
       // Ready
       player.addListener("ready", ({ device_id }) => {
+        this.deviceId = device_id;
         console.log("[Spotify] Ready with Device ID", device_id);
         resolve(true);
       });
@@ -95,9 +97,8 @@ export default class SpotifyWebPlayer {
   }
 
   public play(songId: string) {
-    const playerId = (this.player as any)?._options.id;
     return fetch(
-      `https://api.spotify.com/v1/me/player/play?device_id=${playerId}`,
+      `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
       {
         method: "PUT",
         body: JSON.stringify({ uris: [songId] }),
