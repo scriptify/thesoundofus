@@ -68,6 +68,5 @@ export async function retrieveRelevantAlbum(accessToken: string) {
   const foundAlbum = albums.sharedAlbums.find(
     (album) => album.title === "Us 💕"
   );
-  console.log("retrieveRelevantAlbum", { albums, foundAlbum });
   return foundAlbum;
 }
