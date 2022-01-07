@@ -1,7 +1,9 @@
 import { autorun, makeAutoObservable } from "mobx";
 import getAccessToken, { resetAccessToken } from "../util/accessTokens";
 import env from "../util/env";
-import fetchGooglePhotosAlbum from "../util/google/fetchGooglePhotosAlbum";
+import fetchGooglePhotosAlbum, {
+  retrieveRelevantAlbum,
+} from "../util/google/fetchGooglePhotosAlbum";
 import { Album } from "../util/google/types";
 import fetchSpotifyPlaylist from "../util/spotify/fetchSpotifyPlaylist";
 import { SpotifyPlaylist } from "../util/spotify/types";
@@ -70,9 +72,14 @@ class RootStore {
     autorun(async () => {
       if (!this.googleAccessToken) return;
       try {
+        const shareAlbum = await retrieveRelevantAlbum(this.googleAccessToken);
+        if (!shareAlbum) {
+          alert("Album konnte nicht gefunden werden!");
+          return;
+        }
         this.photos = await fetchGooglePhotosAlbum({
           accessToken: this.googleAccessToken,
-          albumId: env.albumId,
+          albumId: shareAlbum.id,
         });
       } catch (e) {
         this.resetGoogleAccessToken();

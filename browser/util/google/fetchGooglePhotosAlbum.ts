@@ -24,7 +24,7 @@ export default async function fetchGooglePhotosAlbum({
       },
       body: JSON.stringify({
         pageSize: "100",
-        albumId: albumId,
+        albumId,
         pageToken: nextPageToken,
       }),
     }
@@ -47,4 +47,27 @@ export default async function fetchGooglePhotosAlbum({
   }
 
   return data;
+}
+
+interface ShareAlbum {
+  id: string;
+  title: string;
+}
+
+export async function retrieveRelevantAlbum(accessToken: string) {
+  const albums = (await fetch(
+    `https://photoslibrary.googleapis.com/v1/sharedAlbums`,
+    {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  ).then((res) => res.json())) as { sharedAlbums: ShareAlbum[] };
+  const foundAlbum = albums.sharedAlbums.find(
+    (album) => album.title === "Us 💕"
+  );
+  console.log("retrieveRelevantAlbum", { albums, foundAlbum });
+  return foundAlbum;
 }
