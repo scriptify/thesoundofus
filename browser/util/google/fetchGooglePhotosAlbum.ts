@@ -65,8 +65,6 @@ export async function retrieveRelevantAlbum(accessToken: string) {
       },
     }
   ).then((res) => res.json())) as { sharedAlbums: ShareAlbum[] };
-  const foundAlbum = albums.sharedAlbums.find(
-    (album) => album.title === "Us 💕"
-  );
+  const foundAlbum = albums.sharedAlbums.find((album) => album.title === "L&M");
   return foundAlbum;
 }
